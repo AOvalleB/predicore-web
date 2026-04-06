@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrediCore | Mantenimiento Predictivo Industria 4.0 - Colombia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --secondary: #00D4AA;
+            --accent: #FF6B35;
+            --dark: #0A0E27;
+            --dark-light: #151B3D;
+            --gray: #8B92B4;
+            --light: #F0F4FF;
+            --danger: #FF3366;
+            --warning: #FFB800;
+            --success: #00D4AA;
+            --grid-color: rgba(0, 102, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Grid Background Animation */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(10, 14, 39, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 5% 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 102, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+        }
+
+        /* Hero Visual - Dashboard Preview */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        .dashboard-preview {
+            background: var(--dark-light);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s;
+        }
+
+        .dashboard-preview:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dashboard-title {
+            font-size: 0.875rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-chart {
+            height: 40px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+        }
+
+        /* Floating Elements */
+        .floating-card {
+            position: absolute;
+            background: var(--dark-light);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-card:nth-child(2) {
+            top: -20px;
+            right: -30px;
+            animation-delay: -2s;
+        }
+
+        .floating-card:nth-child(3) {
+            bottom: -20px;
+            left: -30px;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .alert-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .alert-warning {
+            background: rgba(255, 184, 0, 0.2);
+            color: var(--warning);
+        }
+
+        .alert-success {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--secondary);
+        }
+
+        /* Live Demo Section */
+        .live-demo {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-light) 100%);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 1.25rem;
+        }
+
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--dark);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .demo-tabs {
+            display: flex;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .demo-tab {
+            flex: 1;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .demo-tab.active {
+            color: white;
+            background: rgba(0, 102, 255, 0.1);
+        }
+
+        .demo-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .demo-content {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .sensors-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sensor-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sensor-card:hover, .sensor-card.active {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .sensor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .sensor-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sensor-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .sensor-value {
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--secondary);
+        }
+
+        .sensor-unit {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .sensor-graph {
+            height: 60px;
+            margin-top: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .visualization-panel {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .viz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .viz-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .viz-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .viz-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background 0.3s;
+        }
+
+        .viz-btn:hover, .viz-btn.active {
+            background: var(--primary);
+        }
+
+        #mainChart {
+            width: 100%;
+            height: 300px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+
+        .prediction-panel {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 170, 0.1));
+            border-radius: 12px;
+            border: 1px solid rgba(0, 102, 255, 0.3);
+        }
+
+        .prediction-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .prediction-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .prediction-marker {
+            position: absolute;
+            top: -4px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        /* Solutions Section */
+        .solutions {
+            padding: 100px 5%;
+            position: relative;
+        }
+
+        .solutions-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--dark-light);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.5s;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+            border-color: rgba(0, 102, 255, 0.3);
+        }
+
+        .solution-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 212, 170, 0.2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 80px 5%;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.05), rgba(0, 212, 170, 0.05));
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-item p {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 170, 0.1));
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 32px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--gray);
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5% 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: var(--dark-light);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .solutions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                PrediCore
+            </div>
+            <ul class="nav-links">
+                <li><a href="#soluciones">Soluciones</a></li>
+                <li><a href="#demo">Demo en Vivo</a></li>
+                <li><a href="#industrial">Industrial</a></li>
+                <li><a href="#residencial">Residencial</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <a href="#demo" class="nav-cta">Probar Demo</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span>🚀</span> Tecnología Industria 4.0 para Colombia
+                </div>
+                <h1>Mantenimiento Predictivo con <span>Inteligencia Artificial</span></h1>
+                <p>Previene fallas antes de que ocurran. Reduce costos operativos hasta un 40% y maximiza la vida útil de tus equipos industriales y sistemas residenciales con nuestros sensores IoT y análisis predictivo en tiempo real.</p>
+
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">40%</div>
+                        <div class="stat-label">Reducción de Costos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">Disponibilidad</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">0s</div>
+                        <div class="stat-label">Tiempo de Respuesta</div>
+                    </div>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#demo" class="btn-primary">
+                        Ver Demo en Vivo
+                        <span>→</span>
+                    </a>
+                    <a href="#contacto" class="btn-secondary">
+                        Hablar con un Experto
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <span class="dashboard-title">Panel de Control - Planta Bogotá</span>
+                        <div class="status-indicator">
+                            <span class="status-dot"></span>
+                            EN VIVO
+                        </div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">Vibración Motor 1</div>
+                            <div class="metric-value" style="color: var(--success);">4.2 mm/s</div>
+                            <div class="metric-chart">
+                                <canvas id="miniChart1" class="chart-line"></canvas>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Temperatura</div>
+                            <div class="metric-value" style="color: var(--warning);">68°C</div>
+                            <div class="metric-chart">
+                                <canvas id="miniChart2" class="chart-line"></canvas>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Consumo Energía</div>
+                            <div class="metric-value" style="color: var(--primary);">245 kW</div>
+                            <div class="metric-chart">
+                                <canvas id="miniChart3" class="chart-line"></canvas>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Eficiencia</div>
+                            <div class="metric-value" style="color: var(--secondary);">94%</div>
+                            <div class="metric-chart">
+                                <canvas id="miniChart4" class="chart-line"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floating-card">
+                    <div class="alert-item">
+                        <div class="alert-icon alert-warning">⚠️</div>
+                        <div>
+                            <div style="font-weight: 600;">Alerta Preventiva</div>
+                            <div style="font-size: 0.75rem; color: var(--gray);">Motor 3 - Desbalance detectado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floating-card">
+                    <div class="alert-item">
+                        <div class="alert-icon alert-success">✓</div>
+                        <div>
+                            <div style="font-weight: 600;">Mantenimiento Programado</div>
+                            <div style="font-size: 0.75rem; color: var(--gray);">En 14 días - Compresor A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section class="live-demo" id="demo">
+        <div class="section-header">
+            <span class="section-tag">🎯 Demo Interactiva</span>
+            <h2 class="section-title">Simulación en Tiempo Real</h2>
+            <p class="section-subtitle">Observa cómo nuestros sensores IoT capturan datos y nuestra IA predice fallas antes de que ocurran. Interactúa con los sensores para ver la respuesta en tiempo real.</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-tabs">
+                <button class="demo-tab active" onclick="switchTab('industrial')">🏭 Planta Industrial</button>
+                <button class="demo-tab" onclick="switchTab('residencial')">🏢 Edificio Residencial</button>
+                <button class="demo-tab" onclick="switchTab('comercial')">🏬 Centro Comercial</button>
+            </div>
+
+            <div class="demo-content">
+                <div class="sensors-panel">
+                    <div class="sensor-card active" onclick="selectSensor(this, 'vibration')">
+                        <div class="sensor-header">
+                            <span class="sensor-name">
+                                <span>📳</span> Sensor de Vibración
+                            </span>
+                            <span class="sensor-status"></span>
+                        </div>
+                        <div class="sensor-value" id="vibValue">4.2</div>
+                        <div class="sensor-unit">mm/s RMS</div>
+                        <div class="sensor-graph">
+                            <canvas id="vibGraph"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card" onclick="selectSensor(this, 'temperature')">
+                        <div class="sensor-header">
+                            <span class="sensor-name">
+                                <span>🌡️</span> Sensor Térmico
+                            </span>
+                            <span class="sensor-status"></span>
+                        </div>
+                        <div class="sensor-value" id="tempValue" style="color: var(--warning);">68.5</div>
+                        <div class="sensor-unit">°C</div>
+                        <div class="sensor-graph">
+                            <canvas id="tempGraph"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card" onclick="selectSensor(this, 'current')">
+                        <div class="sensor-header">
+                            <span class="sensor-name">
+                                <span>⚡</span> Analizador de Corriente
+                            </span>
+                            <span class="sensor-status"></span>
+                        </div>
+                        <div class="sensor-value" id="currValue" style="color: var(--primary);">12.4</div>
+                        <div class="sensor-unit">Amperios</div>
+                        <div class="sensor-graph">
+                            <canvas id="currGraph"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card" onclick="selectSensor(this, 'ultrasound')">
+                        <div class="sensor-header">
+                            <span class="sensor-name">
+                                <span>🔊</span> Ultrasonido
+                            </span>
+                            <span class="sensor-status"></span>
+                        </div>
+                        <div class="sensor-value" id="ultraValue" style="color: var(--secondary);">24</div>
+                        <div class="sensor-unit">dB</div>
+                        <div class="sensor-graph">
+                            <canvas id="ultraGraph"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visualization-panel">
+                    <div class="viz-header">
+                        <h3 class="viz-title" id="vizTitle">Análisis de Vibración - Motor Principal</h3>
+                        <div class="viz-controls">
+                            <button class="viz-btn active">Tiempo Real</button>
+                            <button class="viz-btn">FFT</button>
+                            <button class="viz-btn">Tendencia</button>
+                        </div>
+                    </div>
+                    <canvas id="mainChart"></canvas>
+
+                    <div class="prediction-panel">
+                        <div class="prediction-title">
+                            <span>🔮</span> Predicción de IA - Vida Útil Remanente
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.875rem;">
+                            <span>Estado Actual</span>
+                            <span id="rulValue">45 días</span>
+                        </div>
+                        <div class="prediction-bar">
+                            <div class="prediction-fill" id="predictionBar" style="width: 75%;">
+                                <div class="prediction-marker" style="left: 75%;"></div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.75rem; color: var(--gray);">
+                            <span>Óptimo</span>
+                            <span style="color: var(--warning);">Mantenimiento Recomendado</span>
+                            <span style="color: var(--danger);">Falla Inminente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section class="solutions" id="soluciones">
+        <div class="section-header">
+            <span class="section-tag">⚙️ Soluciones</span>
+            <h2 class="section-title">Adaptado a tus Necesidades</h2>
+            <p class="section-subtitle">Desde grandes plantas industriales hasta conjuntos residenciales, tenemos la solución perfecta para maximizar la disponibilidad de tus activos.</p>
+        </div>
+
+        <div class="solutions-grid">
+            <div class="solution-card" id="industrial">
+                <div class="solution-icon">🏭</div>
+                <h3>Sector Industrial</h3>
+                <p>Soluciones robustas para manufactura, minería, energía y petróleo. Cumplimiento con normativa colombiana de seguridad industrial.</p>
+                <ul class="feature-list">
+                    <li>Monitoreo 24/7 de equipos críticos</li>
+                    <li>Análisis de vibraciones multicanal</li>
+                    <li>Termografía industrial avanzada</li>
+                    <li>Integración con sistemas SCADA</li>
+                    <li>Informes para auditorías (Res. 0312)</li>
+                </ul>
+            </div>
+
+            <div class="solution-card" id="residencial">
+                <div class="solution-icon" style="background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 184, 0, 0.2));">🏢</div>
+                <h3>Edificios Residenciales</h3>
+                <p>Gestión inteligente de activos comunes: ascensores, HVAC, bombas y sistemas eléctricos. Reduce cuotas de administración.</p>
+                <ul class="feature-list">
+                    <li>Monitoreo de ascensores y HVAC</li>
+                    <li>Detección de fugas en tiempo real</li>
+                    <li>Optimización energética</li>
+                    <li>App para administradores</li>
+                    <li>Alertas a propietarios</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h4 id="stat1">150+</h4>
+                <p>Activos Monitoreados en Colombia</p>
+            </div>
+            <div class="stat-item">
+                <h4 id="stat2">98%</h4>
+                <p>Precisión en Predicciones</p>
+            </div>
+            <div class="stat-item">
+                <h4 id="stat3">35%</h4>
+                <p>Ahorro Promedio en Mantenimiento</p>
+            </div>
+            <div class="stat-item">
+                <h4 id="stat4">0</h4>
+                <p>Fallos Inesperados (2024)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contacto">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>¿Listo para transformar tu mantenimiento?</h2>
+                <p>Únete a las empresas colombianas que ya están ahorrando millones con mantenimiento predictivo. Agenda una demo personalizada hoy.</p>
+                <div class="hero-buttons" style="justify-content: center;">
+                    <a href="#" class="btn-primary" onclick="alert('¡Gracias por tu interés! Un especialista se pondrá en contacto contigo.'); return false;">
+                        Solicitar Demo Gratis
+                        <span>→</span>
+                    </a>
+                    <a href="tel:+571234567890" class="btn-secondary">
+                        📞 Llamar Ahora
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    PrediCore
+                </div>
+                <p>Tecnología de punta en mantenimiento predictivo para la industria colombiana. Maximizamos la disponibilidad de tus activos mediante IA e IoT.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Soluciones</h4>
+                <ul>
+                    <li><a href="#">Industria Manufacturera</a></li>
+                    <li><a href="#">Minería y Energía</a></li>
+                    <li><a href="#">Edificios Inteligentes</a></li>
+                    <li><a href="#">Infraestructura</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Empresa</h4>
+                <ul>
+                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="#">Casos de Éxito</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Carreras</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="#">Bogotá, Colombia</a></li>
+                    <li><a href="mailto:info@predicore.co">info@predicore.co</a></li>
+                    <li><a href="tel:+571234567890">+57 1 234 5678</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 PrediCore Colombia. Todos los derechos reservados.</p>
+            <p>Hecho con 💙 para la Industria 4.0</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simulación de datos en tiempo real
+        const sensors = {
+            vibration: { value: 4.2, history: [], maxPoints: 50 },
+            temperature: { value: 68.5, history: [], maxPoints: 50 },
+            current: { value: 12.4, history: [], maxPoints: 50 },
+            ultrasound: { value: 24, history: [], maxPoints: 50 }
+        };
+
+        let currentSensor = 'vibration';
+        let mainChartCtx = null;
+        let animationId = null;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            startSimulation();
+            animateStats();
+        });
+
+        function initCharts() {
+            // Inicializar canvas principales
+            const mainCanvas = document.getElementById('mainChart');
+            mainCanvas.width = mainCanvas.offsetWidth;
+            mainCanvas.height = 300;
+            mainChartCtx = mainCanvas.getContext('2d');
+
+            // Inicializar mini gráficos del hero
+            for (let i = 1; i <= 4; i++) {
+                const canvas = document.getElementById('miniChart' + i);
+                if (canvas) {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = 40;
+                    drawMiniChart(canvas, i);
+                }
+            }
+        }
+
+        function drawMiniChart(canvas, index) {
+            const ctx = canvas.getContext('2d');
+            const colors = ['#00D4AA', '#FFB800', '#0066FF', '#00D4AA'];
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.strokeStyle = colors[index - 1];
+                ctx.lineWidth = 2;
+
+                for (let i = 0; i < canvas.width; i++) {
+                    const y = 20 + Math.sin((i + Date.now() / 1000) * 0.1) * 15 + (Math.random() - 0.5) * 5;
+                    if (i === 0) ctx.moveTo(i, y);
+                    else ctx.lineTo(i, y);
+                }
+                ctx.stroke();
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        function startSimulation() {
+            setInterval(() => {
+                // Actualizar valores de sensores con variación realista
+                sensors.vibration.value = 4.2 + (Math.random() - 0.5) * 0.5;
+                sensors.temperature.value = 68.5 + (Math.random() - 0.5) * 2;
+                sensors.current.value = 12.4 + (Math.random() - 0.5) * 1;
+                sensors.ultrasound.value = 24 + (Math.random() - 0.5) * 3;
+
+                // Guardar historial
+                Object.keys(sensors).forEach(key => {
+                    sensors[key].history.push(sensors[key].value);
+                    if (sensors[key].history.length > sensors[key].maxPoints) {
+                        sensors[key].history.shift();
+                    }
+                });
+
+                // Actualizar UI
+                updateSensorValues();
+                drawMainChart();
+                updatePrediction();
+            }, 1000);
+        }
+
+        function updateSensorValues() {
+            document.getElementById('vibValue').textContent = sensors.vibration.value.toFixed(1);
+            document.getElementById('tempValue').textContent = sensors.temperature.value.toFixed(1);
+            document.getElementById('currValue').textContent = sensors.current.value.toFixed(1);
+            document.getElementById('ultraValue').textContent = sensors.ultrasound.value.toFixed(0);
+
+            // Actualizar colores según umbrales
+            const tempEl = document.getElementById('tempValue');
+            if (sensors.temperature.value > 75) {
+                tempEl.style.color = 'var(--danger)';
+            } else if (sensors.temperature.value > 70) {
+                tempEl.style.color = 'var(--warning)';
+            } else {
+                tempEl.style.color = 'var(--success)';
+            }
+        }
+
+        function drawMainChart() {
+            const canvas = document.getElementById('mainChart');
+            const ctx = mainChartCtx;
+            const width = canvas.width;
+            const height = canvas.height;
+            const data = sensors[currentSensor].history;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Dibujar grid
+            ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < width; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+                ctx.stroke();
+            }
+
+            if (data.length < 2) return;
+
+            // Dibujar línea principal
+            ctx.beginPath();
+            const colors = {
+                vibration: '#00D4AA',
+                temperature: '#FFB800',
+                current: '#0066FF',
+                ultrasound: '#00D4AA'
+            };
+            ctx.strokeStyle = colors[currentSensor];
+            ctx.lineWidth = 3;
+            ctx.lineJoin = 'round';
+
+            const min = Math.min(...data) * 0.9;
+            const max = Math.max(...data) * 1.1;
+            const range = max - min;
+
+            data.forEach((value, index) => {
+                const x = (index / (sensors[currentSensor].maxPoints - 1)) * width;
+                const y = height - ((value - min) / range) * height * 0.8 - height * 0.1;
+
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            // Dibujar área bajo la curva
+            ctx.lineTo(width, height);
+            ctx.lineTo(0, height);
+            ctx.closePath();
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, colors[currentSensor] + '40');
+            gradient.addColorStop(1, colors[currentSensor] + '00');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // Dibujar puntos
+            data.forEach((value, index) => {
+                if (index % 5 === 0) {
+                    const x = (index / (sensors[currentSensor].maxPoints - 1)) * width;
+                    const y = height - ((value - min) / range) * height * 0.8 - height * 0.1;
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI * 2);
+                    ctx.fillStyle = colors[currentSensor];
+                    ctx.fill();
+                    ctx.strokeStyle = 'white';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+        }
+
+        function updatePrediction() {
+            // Simular cálculo de vida útil remanente basado en tendencias
+            const vibTrend = sensors.vibration.history.slice(-10);
+            const avgVib = vibTrend.reduce((a, b) => a + b, 0) / vibTrend.length;
+
+            let rul = 45;
+            if (avgVib > 4.5) rul = 15;
+            else if (avgVib > 4.8) rul = 5;
+            else if (avgVib < 3.8) rul = 60;
+
+            document.getElementById('rulValue').textContent = rul + ' días';
+
+            const percentage = Math.min(100, Math.max(0, (rul / 60) * 100));
+            document.getElementById('predictionBar').style.width = percentage + '%';
+            document.querySelector('.prediction-marker').style.left = percentage + '%';
+        }
+
+        function selectSensor(card, sensorType) {
+            document.querySelectorAll('.sensor-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            currentSensor = sensorType;
+
+            const titles = {
+                vibration: 'Análisis de Vibración - Motor Principal',
+                temperature: 'Monitoreo Térmico - Rodamiento',
+                current: 'Análisis de Corriente - Compresor',
+                ultrasound: 'Detección por Ultrasonido - Fugas'
+            };
+            document.getElementById('vizTitle').textContent = titles[sensorType];
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Simular cambio de escenario
+            const scenarios = {
+                'industrial': { vib: 4.2, temp: 68.5, curr: 12.4, ultra: 24 },
+                'residencial': { vib: 2.1, temp: 45.2, curr: 5.8, ultra: 18 },
+                'comercial': { vib: 3.5, temp: 58.0, curr: 8.5, ultra: 22 }
+            };
+
+            const s = scenarios[tab];
+            sensors.vibration.value = s.vib;
+            sensors.temperature.value = s.temp;
+            sensors.current.value = s.curr;
+            sensors.ultrasound.value = s.ultra;
+
+            updateSensorValues();
+        }
+
+        function animateStats() {
+            const stats = [
+                { id: 'stat1', target: 150, suffix: '+' },
+                { id: 'stat2', target: 98, suffix: '%' },
+                { id: 'stat3', target: 35, suffix: '%' },
+                { id: 'stat4', target: 0, suffix: '' }
+            ];
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        stats.forEach(stat => {
+                            animateValue(stat.id, 0, stat.target, 2000, stat.suffix);
+                        });
+                        observer.disconnect();
+                    }
+                });
+            });
+
+            observer.observe(document.querySelector('.stats-section'));
+        }
+
+        function animateValue(id, start, end, duration, suffix) {
+            const obj = document.getElementById(id);
+            const range = end - start;
+            const minTimer = 50;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            stepTime = Math.max(stepTime, minTimer);
+
+            let startTime = new Date().getTime();
+            let endTime = startTime + duration;
+            let timer;
+
+            function run() {
+                let now = new Date().getTime();
+                let remaining = Math.max((endTime - now) / duration, 0);
+                let value = Math.round(end - (remaining * range));
+                obj.innerHTML = value + suffix;
+                if (value == end) {
+                    clearInterval(timer);
+                }
+            }
+
+            timer = setInterval(run, stepTime);
+            run();
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
