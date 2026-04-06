@@ -1,0 +1,2 @@
+# predicore-web
+Mantenimiento predictivo
